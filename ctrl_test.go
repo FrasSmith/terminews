@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/antavelos/terminews/db"
+	"github.com/frassmith/terminews/db"
 	"testing"
 )
 

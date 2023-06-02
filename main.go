@@ -1,19 +1,19 @@
 /*
-   Terminews is a terminal based (TUI) RSS feed manager.
-   Copyright (C) 2017  Alexandros Ntavelos, a[dot]ntavelos[at]gmail[dot]com
+Terminews is a terminal based (TUI) RSS feed manager.
+Copyright (C) 2017  Alexandros Ntavelos, a[dot]ntavelos[at]gmail[dot]com
 
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package main
 
@@ -24,8 +24,8 @@ import (
 	"os/user"
 	"path"
 
-	"github.com/antavelos/terminews/db"
 	"github.com/fatih/color"
+	"github.com/frassmith/terminews/db"
 	c "github.com/jroimartin/gocui"
 )
 
@@ -183,7 +183,7 @@ func main() {
 	defer g.Close()
 
 	// some basic configuration
-	g.SelFgColor = c.ColorGreen | c.AttrBold
+	g.SelFgColor = c.ColorBlue | c.AttrBold
 	g.BgColor = c.ColorDefault
 	g.Highlight = true
 
@@ -271,7 +271,13 @@ func main() {
 	if err = g.SetKeybinding("", c.KeyEnter, c.ModNone, OnEnter); err != nil {
 		log.Fatal("Failed to set keybindings")
 	}
+	if err = g.SetKeybinding("", c.KeySpace, c.ModNone, OnEnter); err != nil {
+		log.Fatal("Failed to set keybindings")
+	}
 	if err = g.SetKeybinding("", c.KeyCtrlQ, c.ModNone, RemoveTopView); err != nil {
+		log.Fatal("Failed to set keybindings")
+	}
+	if err = g.SetKeybinding("", c.KeyEsc, c.ModNone, RemoveTopView); err != nil {
 		log.Fatal("Failed to set keybindings")
 	}
 	if err = g.SetKeybinding("", c.KeyCtrlF, c.ModNone, Find); err != nil {

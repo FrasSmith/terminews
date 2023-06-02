@@ -1,19 +1,19 @@
 /*
-   Terminews is a terminal based (TUI) RSS feed manager.
-   Copyright (C) 2017  Alexandros Ntavelos, a[dot]ntavelos[at]gmail[dot]com
+Terminews is a terminal based (TUI) RSS feed manager.
+Copyright (C) 2017  Alexandros Ntavelos, a[dot]ntavelos[at]gmail[dot]com
 
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package main
 
@@ -24,7 +24,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/antavelos/terminews/db"
+	"github.com/frassmith/terminews/db"
 	c "github.com/jroimartin/gocui"
 )
 
@@ -255,7 +255,7 @@ func Quit(g *c.Gui, v *c.View) error {
 func SwitchView(g *c.Gui, v *c.View) error {
 	switch v.Name() {
 	case SITES_VIEW:
-		g.SelFgColor = c.ColorGreen | c.AttrBold
+		g.SelFgColor = c.ColorBlue | c.AttrBold
 		if v == SitesList.View {
 			NewsList.Focus(g)
 			SitesList.Unfocus()
@@ -387,7 +387,7 @@ func OnEnter(g *c.Gui, v *c.View) error {
 		Summary.Clear()
 		NewsList.Clear()
 		NewsList.Focus(g)
-		g.SelFgColor = c.ColorGreen | c.AttrBold
+		g.SelFgColor = c.ColorBlue | c.AttrBold
 		NewsList.Title = " Fetching ... "
 		g.Update(func(g *c.Gui) error {
 			events, err := DownloadEvents(site.Url)
@@ -439,7 +439,7 @@ func OnEnter(g *c.Gui, v *c.View) error {
 					return err
 				}
 				deletePromptView(g)
-				g.SelFgColor = c.ColorGreen | c.AttrBold
+				g.SelFgColor = c.ColorBlue | c.AttrBold
 				SitesList.Focus(g)
 
 				if err = LoadSites(); err != nil {
@@ -481,6 +481,33 @@ func OnEnter(g *c.Gui, v *c.View) error {
 				}
 			}()
 		}
+	case NEWS_VIEW:
+		if err := createContentView(g); err != nil {
+			log.Println("Error on createContentView", err)
+			return err
+		}
+		g.SelFgColor = c.ColorBlue | c.AttrBold
+		cv, _ := g.View(CONTENT_VIEW)
+		cv.Title = "Fetching..."
+		g.Update(func(g *c.Gui) error {
+			ContentList.Focus(g)
+			currItem := NewsList.CurrentItem()
+			if currItem == nil {
+				return nil
+			}
+
+			site := SitesList.CurrentItem().(db.Site)
+			event := currItem.(db.Event)
+
+			CurrentContent, _ = GetContent(getContentURL(site, event.Url))
+			if err := UpdateContent(g, CurrentContent); err != nil {
+				log.Println("Error on UpdateContent", err)
+				return err
+			}
+			ContentList.SetTitle(fmt.Sprintf("%v (Ctrl-q to close)", event.Title))
+
+			return nil
+		})
 	}
 
 	return nil
@@ -617,7 +644,7 @@ func RemoveTopView(g *c.Gui, v *c.View) error {
 	if isBookmarksNews() {
 		g.SelFgColor = c.ColorMagenta | c.AttrBold
 	} else {
-		g.SelFgColor = c.ColorGreen | c.AttrBold
+		g.SelFgColor = c.ColorBlue | c.AttrBold
 	}
 
 	return nil
@@ -647,7 +674,7 @@ func LoadContent(g *c.Gui, v *c.View) error {
 			log.Println("Error on createContentView", err)
 			return err
 		}
-		g.SelFgColor = c.ColorGreen | c.AttrBold
+		g.SelFgColor = c.ColorBlue | c.AttrBold
 		cv, _ := g.View(CONTENT_VIEW)
 		cv.Title = "Fetching..."
 		g.Update(func(g *c.Gui) error {

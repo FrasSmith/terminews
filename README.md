@@ -1,4 +1,4 @@
-# terminews [![Build Status](https://travis-ci.org/antavelos/terminews.svg?branch=master)](https://travis-ci.org/antavelos/terminews)
+# terminews [![Build Status](https://travis-ci.org/frassmith/terminews.svg?branch=master)](https://travis-ci.org/frassmith/terminews)
 
 **terminews** is a terminal based application (TUI) which makes use of the [gocui](https://github.com/jroimartin/gocui) and [gofeed](https://github.com/mmcdole/gofeed) libraries and allows you to manage RSS resources and display their news feed. Currently it is only compatible with _Linux_ environments.
 
@@ -12,12 +12,12 @@
 
 ### From binary
 
-You may download and run the binary from the [latest release](https://github.com/antavelos/terminews/releases/latest).
+You may download and run the binary from the [latest release](https://github.com/frassmith/terminews/releases/latest).
 
 ### From source code
 
-    go get github.com/antavelos/terminews
-	cd $GOPATH/src/github.com/antavelos/terminews
+    go get github.com/frassmith/terminews
+	cd $GOPATH/src/github.com/frassmith/terminews
 	go build
 	./terminews
 
